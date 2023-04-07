@@ -48,3 +48,76 @@ I calculate the accuracy of the predictions using `accuracy_score`, passing in t
 Finally the output would be like:
 
 `Accuracy: 0.986667`
+
+So also we can do some plottings:
+
+```python
+import matplotlib.pyplot as plt
+
+# plot feature importance
+xgb.plot_importance(xg_clf)
+plt.show()
+```
+
+![Untitled](https://user-images.githubusercontent.com/109058050/230643400-8953c53e-9032-401f-acaa-be906c5d9a09.png)
+
+
+
+```python
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+
+# calculate confusion matrix
+cm = confusion_matrix(y_test, preds)
+
+# plot confusion matrix heatmap
+sns.heatmap(cm, annot=True, cmap="Blues")
+plt.show()
+```
+
+![Untitled](https://user-images.githubusercontent.com/109058050/230643438-88d382c1-686c-453a-b8fa-58641b97a208.png)
+
+
+Also for the iterations:
+
+```python
+import xgboost as xgb
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+# load iris data
+iris = load_iris()
+X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2)
+
+dtrain = xgb.DMatrix(X_train, label=y_train)
+dtest = xgb.DMatrix(X_test, label=y_test)
+
+# set parameters
+params = {
+    'objective': 'multi:softmax',
+    'num_class': 3,
+    'max_depth': 3,
+    'eta': 0.1,
+    'gamma': 0.1,
+    'lambda': 1,
+    'alpha': 1,
+    'eval_metric': ['merror', 'mlogloss']
+}
+
+# fit model
+evolution = {}
+xgb_model = xgb.train(params=params, dtrain=dtrain, num_boost_round=100, evals=[(dtrain, 'train'), (dtest, 'test')], evals_result=evolution)
+
+# plot training and validation error metrics
+plt.plot(evolution['train']['mlogloss'], label='train_logloss')
+plt.plot(evolution['test']['mlogloss'], label='test_logloss')
+plt.plot(evolution['train']['merror'], label='train_error')
+plt.plot(evolution['test']['merror'], label='test_error')
+plt.legend()
+plt.show()
+```
+
+![Untitled](https://user-images.githubusercontent.com/109058050/230643468-e600f35c-7e0f-4407-9933-396d2085a192.png)
+
+
