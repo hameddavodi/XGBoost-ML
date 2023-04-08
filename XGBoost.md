@@ -77,7 +77,6 @@ plt.show()
 
 ![Untitled](https://user-images.githubusercontent.com/109058050/230643438-88d382c1-686c-453a-b8fa-58641b97a208.png)
 
-
 Also for the iterations:
 
 ```python
