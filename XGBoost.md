@@ -1,4 +1,4 @@
-For sure we have to import some libraries :))
+For sure we have to import some libraries :D
 ```python
 import xgboost as xgb
 from sklearn.datasets import load_iris
